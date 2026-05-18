@@ -32,18 +32,18 @@
 </head>
 <body>
 <div class="container">
-    <div class="title">杨氏模量实验｜AI深度答疑伴侣</div>
-    <div class="sub">基于通义千问 + 实验说明书｜深度思考·专业回答｜可扫码使用</div>
+    <div class="title">杨氏模量实验AI答疑伴侣</div>
+    <div class="sub">基于AI大模型+实验材料</div>
 
     <div class="card">
-        <h3>💬 你想问什么（原理/步骤/误差/仪器/报告/答辩）</h3>
-        <textarea id="q" placeholder="例如：光杠杆原理、公式推导、逐差法、误差来源、仪器怎么调、实验报告怎么写、答辩话术..."></textarea>
-        <button class="btn" onclick="ask()">🧠 深度思考并专业解答</button>
+        <h3>💬 你对杨氏模量实验的疑问还有啥吖~</h3>
+        <textarea id="q" placeholder="我猜猜~你肯定会问：光杠杆原理、公式推导、逐差法、误差来源、仪器怎么调、实验报告怎么写等"></textarea>
+        <button class="btn" onclick="ask()">🧠 轻轻敲我一下 我才回答你噢 </button>
     </div>
 
     <div class="card">
-        <h3>📘 专业深度解答</h3>
-        <div class="ans-box" id="ans">AI 已准备就绪，基于通义千问与实验说明书，可解答原理、步骤、误差、仪器、报告、答辩等全部深度问题～</div>
+        <h3>📘 我的深度解答在下面吖~</h3>
+        <div class="ans-box" id="ans">我已准备接受拷问啦，可以为你解答原理、步骤、误差、仪器、报告等全部深度问题噢～</div>
     </div>
 </div>
 
@@ -137,8 +137,8 @@ $$E=\\frac{8FLH}{\\pi d^2 D \\Delta x}$$
 async function ask() {
     const q = document.getElementById("q").value.trim();
     const ans = document.getElementById("ans");
-    if (!q) { ans.innerHTML = "⚠️ 请输入你的问题"; return; }
-    ans.innerHTML = "🧠 大模型结合实验说明书，深度思考中...";
+    if (!q) { ans.innerHTML = "⚠️ 笨蛋！你都没输入问题，我咋回答你嘞~"; return; }
+    ans.innerHTML = "🧠 我正在思考ing...";
 
     const prompt = `
 你是大学物理实验资深讲师，**完全基于下面官方说明书** + **深度物理理解**回答学生问题。
