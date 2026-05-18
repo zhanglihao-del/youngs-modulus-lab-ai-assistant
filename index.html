@@ -15,59 +15,24 @@
     <style>
         *{margin:0;padding:0;box-sizing:border-box;font-family:"Microsoft YaHei",sans-serif;}
 
-        /* 动态科技背景 */
+        /* 关键：不重复、全屏居中、不变形、清晰背景图 */
         body {
             position: relative;
             color: #e2e8f0;
             padding: 30px 20px;
             min-height: 100vh;
-            background: linear-gradient(135deg, #0d1323, #1a243e, #24345e);
+            background: #0b1020 url('https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/e0aa89d62b2b4967b4d14414e89eccc3.png') center / cover no-repeat fixed;
             overflow-x: hidden;
         }
 
-        /* 星光粒子背景 */
+        /* 暗色遮罩，文字清晰，不影响背景图 */
         body::before {
             content: "";
             position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-image: 
-                radial-gradient(circle at 20% 30%, rgba(94, 234, 212, 0.08) 1px, transparent 1px),
-                radial-gradient(circle at 70% 60%, rgba(96, 165, 250, 0.08) 1px, transparent 1px),
-                radial-gradient(circle at 40% 80%, rgba(67, 233, 123, 0.05) 1px, transparent 1px);
-            background-size: 40px 40px;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(12, 22, 38, 0.7);
             z-index: -1;
-            opacity: 0.6;
-            animation: bgMove 12s linear infinite;
-        }
-
-        @keyframes bgMove {
-            0% { transform: translateY(0px); }
-            100% { transform: translateY(-40px); }
-        }
-
-        /* 实验器材装饰（使用稳定CDN图片） */
-        .equipment {
-            position: fixed;
-            opacity: 0.07;
-            z-index: -1;
-            background-size: contain;
-            background-repeat: no-repeat;
-        }
-
-        .eq1 {
-            width: 360px; height: 360px;
-            top: 10%; left: -80px;
-            background-image: url('https://img0.baidu.com/it/u=3870251999,3903119143&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500');
-        }
-        .eq2 {
-            width: 320px; height: 320px;
-            bottom: 5%; right: -60px;
-            background-image: url('https://img0.baidu.com/it/u=1976799119,3829139257&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500');
-        }
-        .eq3 {
-            width: 260px; height: 260px;
-            top: 40%; right: 15%;
-            background-image: url('https://img0.baidu.com/it/u=2101792343,1782319014&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500');
         }
 
         .container {
@@ -81,7 +46,7 @@
             text-align: center;
             font-size: 30px;
             color: #5eead4;
-            text-shadow: 0 0 18px #22d3ee99;
+            text-shadow: 0 0 18px #22d3ee;
             margin-bottom: 8px;
             letter-spacing: 1px;
         }
@@ -94,19 +59,19 @@
         }
 
         .card {
-            background: rgba(255,255,255,0.05);
+            background: rgba(255,255,255,0.08);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(72, 187, 255, 0.25);
+            border: 1px solid rgba(72, 187, 255, 0.35);
             border-radius: 20px;
             padding: 26px;
             margin-bottom: 22px;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
             transition: all 0.3s;
         }
 
         .card:hover {
-            border: 1px solid rgba(72, 187, 255, 0.4);
-            box-shadow: 0 12px 36px rgba(94,234,212,0.1);
+            border: 1px solid rgba(72, 187, 255, 0.5);
+            box-shadow: 0 12px 36px rgba(94,234,212,0.2);
         }
 
         .card h3 {
@@ -121,8 +86,8 @@
         textarea {
             width: 100%;
             height: 130px;
-            background: rgba(255,255,255,0.07);
-            border: 1px solid rgba(72, 187, 255, 0.3);
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(72, 187, 255, 0.4);
             border-radius: 14px;
             padding: 16px;
             color: #e2e8f0;
@@ -134,7 +99,7 @@
 
         textarea:focus {
             border-color: #5eead4;
-            background: rgba(255,255,255,0.09);
+            background: rgba(255,255,255,0.1);
         }
 
         .btn {
@@ -150,17 +115,17 @@
             margin-top: 16px;
             cursor: pointer;
             transition: 0.3s;
-            box-shadow: 0 5px 15px rgba(14,165,233,0.25);
+            box-shadow: 0 5px 15px rgba(14,165,233,0.35);
         }
 
         .btn:hover {
             background-position: 100% 0;
             transform: translateY(-3px);
-            box-shadow: 0 8px 22px rgba(94,234,212,0.25);
+            box-shadow: 0 8px 22px rgba(94,234,212,0.35);
         }
 
         .ans-box {
-            background: rgba(0,15,30,0.35);
+            background: rgba(0,15,30,0.45);
             backdrop-filter: blur(6px);
             border-radius: 16px;
             padding: 28px;
@@ -169,7 +134,7 @@
             overflow-y: auto;
             line-height: 1.95;
             font-size: 15px;
-            border: 1px solid rgba(94,234,212,0.15);
+            border: 1px solid rgba(94,234,212,0.25);
         }
 
         .ans-box h1,.ans-box h2,.ans-box h3 {
@@ -180,21 +145,15 @@
         .ans-box ul,.ans-box ol { margin-left: 24px; margin: 10px 0; }
         .ans-box strong { color: #93c5fd; font-weight: 600; }
 
-        /* 滚动条美化 */
         ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-thumb { background: #5eead455; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: #5eead4; border-radius: 10px; }
     </style>
 </head>
 
 <body>
-    <!-- 实验器材装饰 -->
-    <div class="equipment eq1"></div>
-    <div class="equipment eq2"></div>
-    <div class="equipment eq3"></div>
-
     <div class="container">
         <div class="title">杨氏模量实验AI答疑伴侣</div>
-        <div class="sub">基于AI大模型 + 实验材料｜深度解答 · 专业权威</div>
+        <div class="sub">基于AI大模型 + 实验材料</div>
 
         <div class="card">
             <h3>💬 你对杨氏模量实验的疑问还有啥吖~</h3>
