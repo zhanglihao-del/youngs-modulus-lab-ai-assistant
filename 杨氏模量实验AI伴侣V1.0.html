@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>杨氏模量实验｜AI深度答疑伴侣（竞赛版）</title>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script>
+        window.MathJax = {
+            tex: { inlineMath: [['$','$']], displayMath: [['$$','$$']] },
+            svg: { fontCache: 'global' }
+        };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box;font-family:"Microsoft YaHei",sans-serif;}
+        body{background:linear-gradient(135deg,#0b132b,#1c2541);color:#e2e8f0;padding:30px 20px;}
+        .container{max-width:920px;margin:0 auto;}
+        .title{text-align:center;font-size:28px;color:#5eead4;text-shadow:0 0 12px #22d3ee66;margin-bottom:10px;}
+        .sub{text-align:center;color:#94a3b8;margin-bottom:30px;}
+        .card{background:rgba(255,255,255,0.05);border:1px solid rgba(72,187,255,0.2);border-radius:18px;padding:24px;margin-bottom:20px;}
+        .card h3{color:#60a5fa;margin-bottom:16px;font-size:18px;}
+        textarea{width:100%;height:120px;background:rgba(255,255,255,0.07);border:1px solid rgba(72,187,255,0.3);border-radius:12px;padding:15px;color:#e2e8f0;font-size:15px;resize:none;outline:none;}
+        .btn{width:100%;padding:15px;background:linear-gradient(90deg,#2563eb,#0ea5e9);color:white;border:none;border-radius:12px;font-size:16px;font-weight:bold;margin-top:15px;cursor:pointer;}
+        .btn:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(14,165,233,0.3);}
+        .ans-box{background:rgba(0,15,30,0.3);border-radius:14px;padding:25px;min-height:320px;max-height:550px;overflow-y:auto;line-height:1.9;font-size:15px;}
+        .ans-box h1,.ans-box h2,.ans-box h3{color:#5eead4;margin:12px 0;}
+        .ans-box p{margin:8px 0;}
+        .ans-box ul,.ans-box ol{margin-left:22px;margin:8px 0;}
+        .ans-box strong{color:#93c5fd;}
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="title">杨氏模量实验｜AI深度答疑伴侣</div>
+    <div class="sub">基于通义千问 + 实验说明书｜深度思考·专业回答｜可扫码使用</div>
+
+    <div class="card">
+        <h3>💬 你想问什么（原理/步骤/误差/仪器/报告/答辩）</h3>
+        <textarea id="q" placeholder="例如：光杠杆原理、公式推导、逐差法、误差来源、仪器怎么调、实验报告怎么写、答辩话术..."></textarea>
+        <button class="btn" onclick="ask()">🧠 深度思考并专业解答</button>
+    </div>
+
+    <div class="card">
+        <h3>📘 专业深度解答</h3>
+        <div class="ans-box" id="ans">AI 已准备就绪，基于通义千问与实验说明书，可解答原理、步骤、误差、仪器、报告、答辩等全部深度问题～</div>
+    </div>
+</div>
+
+<script>
+const API_KEY = "sk-929f977a6546471a90d935b7bc1d79a5";
+const MODEL = "qwen-turbo";
+
+// 内置完整说明书知识库（学生不问数据也能深度回答）
+const KNOWLEDGE = `
+# 杨氏模量实验官方说明书（完整版）
+
+## 一、实验概述
+力作用于物体产生形变，弹性形变分纵向、切变、扭转、弯曲。
+杨氏模量E：材料抵抗拉伸形变能力，仅与材料性质有关。
+本实验采用**拉伸法+光杠杆法**测金属丝杨氏模量。
+
+## 二、实验目的
+1. 学会拉伸法测杨氏模量；
+2. 掌握光杠杆微小位移放大原理；
+3. 掌握游标卡尺、千分尺、钢卷尺、望远镜使用；
+4. 学会数据处理、误差分析、不确定度计算。
+
+## 三、实验仪器
+- 杨氏模量仪（含金属丝、光杠杆、望远镜、标尺）
+- 螺旋测微器（精度0.01mm）
+- 游标卡尺（精度0.02mm）
+- 钢卷尺（精度1mm）
+- 数字拉力计、LED标尺
+
+## 四、核心原理
+### 1. 杨氏模量定义
+$$E=\\frac{\\sigma}{\\varepsilon}=\\frac{F/S}{\\Delta L/L}$$
+S=πd²/4
+
+### 2. 光杠杆放大
+ΔL：金属丝微小伸长
+Δx：标尺读数变化
+放大倍数：2H/D
+$$\\Delta L=\\frac{D\\cdot\\Delta x}{2H}$$
+
+### 3. 最终公式
+$$E=\\frac{8FLH}{\\pi d^2 D \\Delta x}$$
+
+## 五、实验步骤
+1. 调平仪器，拉直金属丝；
+2. 调节望远镜：粗调共轴、细调清晰、消视差；
+3. 测L、H、D；
+4. 千分尺测直径5次；
+5. 加砝码（3→10kg）记录标尺；
+6. 减砝码记录标尺；
+7. 取平均、逐差法/最小二乘法处理；
+8. 计算E并分析误差。
+
+## 六、数据处理
+1. 直径取平均；
+2. 加减读数取平均；
+3. 逐差法：消除系统误差、提高精度；
+4. 最小二乘法：拟合F-x直线求斜率k；
+5. E=8gLH/(πd²Dk)
+
+## 七、误差来源
+1. 金属丝直径不均、千分尺读数误差；
+2. 光杠杆未放平、镜面倾斜；
+3. 望远镜视差、读数视差；
+4. 金属丝弯曲、未竖直；
+5. 砝码质量误差、振动影响；
+6. 温度影响。
+
+## 八、仪器参数
+- 望远镜：0.3~8m
+- 放大倍数：30~50倍
+- 标尺：0~8cm，1mm
+- 千分尺：25mm，0.01mm
+- 金属丝：65Mn，约0.7mm
+- E理论：约196~198 GPa
+
+## 九、逐差法
+分组：前4、后4
+对应项相减，求平均Δx，消除线性误差
+
+## 十、最小二乘法
+拟合F=kx+b，k为劲度系数，E与k成反比
+
+## 十一、实验报告要点
+目的、原理、仪器、步骤、数据、处理、结果、误差、结论
+
+## 十二、答辩重点
+光杠杆放大、公式推导、逐差法、误差、仪器调节、数据处理
+`;
+
+async function ask() {
+    const q = document.getElementById("q").value.trim();
+    const ans = document.getElementById("ans");
+    if (!q) { ans.innerHTML = "⚠️ 请输入你的问题"; return; }
+    ans.innerHTML = "🧠 大模型结合实验说明书，深度思考中...";
+
+    const prompt = `
+你是大学物理实验资深讲师，**完全基于下面官方说明书** + **深度物理理解**回答学生问题。
+学生不问数据也能答原理、步骤、误差、仪器、报告、答辩、逐差法、光杠杆、公式、实验反思。
+回答要求：
+1. 专业、深度、严谨、竞赛答辩水平；
+2. 用Markdown排版、公式用$$或$；
+3. 分点清晰、逻辑完整；
+4. 结合说明书，不要编造；
+5. 语言易懂，适合大学生。
+
+【实验说明书全文】
+${KNOWLEDGE}
+
+【学生问题】
+${q}
+`;
+
+    try {
+        const res = await fetch("https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + API_KEY
+            },
+            body: JSON.stringify({
+                model: MODEL,
+                input: { prompt },
+                parameters: { temperature: 0.2, result_format: "text" }
+            })
+        });
+        const data = await res.json();
+        const text = data.output.text;
+        ans.innerHTML = marked.parse(text);
+        MathJax.typesetPromise([ans]);
+    } catch (e) {
+        ans.innerHTML = "❌ 请求失败：" + e.message;
+    }
+}
+</script>
+</body>
+</html>
