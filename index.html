@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>杨氏模量实验｜AI深度答疑伴侣</title>
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script> 
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script>
         window.MathJax = {
             tex: { inlineMath: [['$','$']], displayMath: [['$$','$$']] },
@@ -21,7 +21,7 @@
             color: #e2e8f0;
             padding: 30px 20px;
             min-height: 100vh;
-            background: #0b1020 url('https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/e0aa89d62b2b4967b4d14414e89eccc3.png') center / cover no-repeat fixed;
+            background: #0b1203 url('https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/e0aa89d62b2b4967b4d14414e89eccc3.png') center / cover no-repeat fixed;
             overflow-x: hidden;
         }
 
@@ -171,140 +171,86 @@
 const API_KEY = "sk-929f977a6546471a90d935b7bc1d79a5";
 const MODEL = "qwen-turbo";
 
-// 仅更新此处知识库，其余代码、注释、交互完全保留原样
 const KNOWLEDGE = `
-# 杨氏模量实验官方说明书（同步计算系统V3.0 完整底层逻辑）
+# 杨氏模量实验官方说明书（完整版）
+
 ## 一、实验概述
 力作用于物体产生形变，弹性形变分纵向、切变、扭转、弯曲。
 杨氏模量E：材料抵抗拉伸形变能力，仅与材料性质有关。
-本实验采用**拉伸法+光杠杆法**测金属丝杨氏模量，配套程序完成数据处理、最小二乘拟合、A/B类不确定度评定、拟合曲线绘制。
-全程基准单位：mm，结果同时输出 $\mathrm{N/mm^2}$、$\mathrm{GPa}$。
+本实验采用**拉伸法+光杠杆法**测金属丝杨氏模量。
 
 ## 二、实验目的
 1. 学会拉伸法测杨氏模量；
 2. 掌握光杠杆微小位移放大原理；
 3. 掌握游标卡尺、千分尺、钢卷尺、望远镜使用；
-4. 学会数据处理、误差分析、完整不确定度计算。
+4. 学会数据处理、误差分析、不确定度计算。
 
 ## 三、实验仪器
 - 杨氏模量仪（含金属丝、光杠杆、望远镜、标尺）
-- 螺旋测微器（仪器极限误差0.004mm）
-- 游标卡尺（测光杠杆D，极限误差0.02mm）
-- 钢卷尺（测L、H，极限误差0.5mm）
+- 螺旋测微器（精度0.01mm）
+- 游标卡尺（精度0.02mm）
+- 钢卷尺（精度1mm）
 - 数字拉力计、LED标尺
 
 ## 四、核心原理
 ### 1. 杨氏模量定义
-$$E=\frac{\sigma}{\varepsilon}=\frac{F/S}{\Delta L/L}$$
-横截面积 $S=\pi d^2/4$
+$$E=\\frac{\\sigma}{\\varepsilon}=\\frac{F/S}{\\Delta L/L}$$
+S=πd²/4
 
 ### 2. 光杠杆放大
 ΔL：金属丝微小伸长
 Δx：标尺读数变化
-放大倍数：$2H/D$
-$$\Delta L=\frac{D\cdot\Delta x}{2H}$$
+放大倍数：2H/D
+$$\\Delta L=\\frac{D\\cdot\\Delta x}{2H}$$
 
-### 3. 最终计算公式（程序使用）
-$$E=\frac{8FLH}{\pi d^2 D \Delta x}$$
-拟合形式：$x = kF+b$，代入得：
-$$E = \frac{8LH}{\pi d^2 D k}$$
+### 3. 最终公式
+$$E=\\frac{8FLH}{\\pi d^2 D \\Delta x}$$
 
 ## 五、实验步骤
 1. 调平仪器，拉直金属丝；
 2. 调节望远镜：粗调共轴、细调清晰、消视差；
-3. 测量几何量 L、H、D；
-4. 千分尺测金属丝直径5次，记录零点读数；
-5. 加砝码（3→10kg）记录标尺读数；
-6. 减砝码记录标尺读数；
-7. 读数取平均，最小二乘法拟合求斜率k；
-8. 计算E及全套不确定度，绘制F-x拟合曲线。
+3. 测L、H、D；
+4. 千分尺测直径5次；
+5. 加砝码（3→10kg）记录标尺；
+6. 减砝码记录标尺；
+7. 取平均、逐差法/最小二乘法处理；
+8. 计算E并分析误差。
 
-## 六、原始数据预处理
-### 1. 标尺读数平均（消除弹性滞后）
-$$\bar{x}_i = \frac{x_{\text{加},i}+x_{\text{减},i}}{2}$$
-### 2. 拉力计算
-砝码质量 $m(\mathrm{kg})$，$g=9.8\mathrm{m/s^2}$
-$$F_i = m_i \cdot g$$
-### 3. 直径零点修正
-$d_0$：千分尺零点，$\bar{d}_{\text{raw}}$：5次测量均值
-$$d = \bar{d}_{\text{raw}} - d_0$$
+## 六、数据处理
+1. 直径取平均；
+2. 加减读数取平均；
+3. 逐差法：消除系统误差、提高精度；
+4. 最小二乘法：拟合F-x直线求斜率k；
+5. E=8gLH/(πd²Dk)
 
-## 七、不确定度完整计算（与程序完全一致）
-### 7.1 金属丝直径 d（5次重复测量）
-#### A类不确定度（统计分量）
-$$u_A(d) = \sqrt{\frac{\sum_{i=1}^n (d_i-\bar{d}_{\text{raw}})^2}{n(n-1)}},\quad n=5$$
-#### B类不确定度（仪器误差，均匀分布）
-$$u_B(d) = \frac{\Delta_{\text{仪}}}{\sqrt{3}},\quad \Delta_{\text{仪}}=0.004\ \mathrm{mm}$$
-#### 合成标准不确定度
-$$u(d) = \sqrt{u_A(d)^2 + u_B(d)^2}$$
-
-### 7.2 几何量 L、H、D（单次测量）
-单次测量无统计误差，$u_A=0$，仅计算B类不确定度：
-$$u(L)=u(H)=\frac{0.5}{\sqrt{3}},\quad u(D)=\frac{0.02}{\sqrt{3}}$$
-
-### 7.3 最小二乘拟合 & 斜率不确定度 $u(k)$
-设拟合方程：$x = kF + b$
-1. 基础求和：$\sum F,\ \sum x,\ \sum Fx,\ \sum F^2$
-2. 斜率：
-$$k=\frac{n\sum Fx-\sum F \sum x}{n\sum F^2-(\sum F)^2}$$
-3. 截距：$b=\bar{x}-k\bar{F}$
-
-4. 残差平方和（两种等价写法）
-代码实现（逐点计算）：
-$$S_e=\sum_{i=1}^n (x_i-\hat{x}_i)^2,\quad \hat{x}_i=kF_i+b$$
-手写公式等价形式：
-$$S_{xF}=\sum F_i x_i-\frac{(\sum F)(\sum x)}{n},\quad S_{xx}=\sum x_i^2-\frac{(\sum x)^2}{n}$$
-$$S_e = S_{xx} - k\cdot S_{xF}$$
-
-5. 拟合标准偏差：
-$$s_x = \sqrt{\frac{S_e}{n-2}}$$
-6. 自变量离差平方和：
-$$S_{FF}=\sum (F_i-\bar{F})^2$$
-7. 斜率标准不确定度：
-$$u(k) = \frac{s_x}{\sqrt{S_{FF}}}$$
-
-### 7.4 杨氏模量相对不确定度（程序核心公式）
-$$
-\frac{u(E)}{E}
-= \sqrt{\left(\frac{u_L}{L}\right)^2
-+\left(\frac{u_H}{H}\right)^2
-+\left(\frac{u_D}{D}\right)^2
-+\left(2\frac{u_d}{d}\right)^2
-+\left(\frac{u_k}{k}\right)^2}
-$$
-
-### 7.5 合成与扩展不确定度
-$$u_E = E \cdot \frac{u(E)}{E}$$
-包含因子 $k=2$，扩展不确定度：
-$$U_E = 2\cdot u_E$$
-
-## 八、单位换算
-$$1\ \mathrm{N/mm^2} = 1\ \mathrm{GPa}$$
-
-## 九、最小二乘法
-拟合 $x=kF+b$，$k$ 为单位拉力对应的标尺变化量，E与k成反比；程序同时输出拟合曲线。
-
-## 十、误差来源
+## 七、误差来源
 1. 金属丝直径不均、千分尺读数误差；
 2. 光杠杆未放平、镜面倾斜；
-3. 望远镜视差、人为读数误差；
+3. 望远镜视差、读数视差；
 4. 金属丝弯曲、未竖直；
-5. 砝码质量误差、加载卸载弹性滞后；
-6. 装置振动、温度影响。
+5. 砝码质量误差、振动影响；
+6. 温度影响。
 
-## 十一、仪器参数
+## 八、仪器参数
 - 望远镜：0.3~8m
 - 放大倍数：30~50倍
 - 标尺：0~8cm，1mm
-- 千分尺：25mm，0.01mm，极限误差0.004mm
+- 千分尺：25mm，0.01mm
 - 金属丝：65Mn，约0.7mm
 - E理论：约196~198 GPa
 
-## 十二、实验报告要点
-目的、原理、仪器、步骤、原始数据、**全套不确定度计算**、最小二乘拟合、结果表达式、误差分析、结论。
+## 九、逐差法
+分组：前4、后4
+对应项相减，求平均Δx，消除线性误差
 
-## 十三、答辩重点
-光杠杆放大原理、公式完整推导、A/B类不确定度区别、最小二乘法、残差两种等价形式、斜率不确定度、不确定度传递、仪器调节、误差分析。
+## 十、最小二乘法
+拟合F=kx+b，k为劲度系数，E与k成反比
+
+## 十一、实验报告要点
+目的、原理、仪器、步骤、数据、处理、结果、误差、结论
+
+## 十二、答辩重点
+光杠杆放大、公式推导、逐差法、误差、仪器调节、数据处理
 `;
 
 async function ask() {
