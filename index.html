@@ -197,10 +197,10 @@
             <div class="ans-box" id="ans">我已准备接受拷问啦，可以为你解答原理、步骤、误差、仪器、报告等全部深度问题噢～</div>
         </div>
 
-        <!-- 这里用你自己的GitHub外链，100%有效 -->
+        <!-- 同源图片地址，手机端也能正常加载 -->
         <div class="diagram-card">
             <h3 style="color: #60a5fa; margin-bottom: 18px; font-size: 19px; text-align: left;">📐 光杠杆放大原理示意图</h3>
-            <img src="https://raw.githubusercontent.com/zhanglihao-del/my-lab-images/main/light-lever.png" alt="光杠杆放大原理示意图">
+            <img src="https://zhanglihao-del.github.io/youngs-modulus-lab-ai-assistant/light-lever.png" alt="光杠杆放大原理示意图">
         </div>
     </div>
 
@@ -362,8 +362,13 @@ ${q}
         });
         const data = await res.json();
         const text = data.output.text;
-        ans.innerHTML = marked.parse(text);
-        await MathJax.typesetPromise([ans]);
+        // 兼容手机端：如果marked加载失败，直接显示文本
+        if (typeof marked !== 'undefined') {
+            ans.innerHTML = marked.parse(text);
+            await MathJax.typesetPromise([ans]);
+        } else {
+            ans.innerHTML = text.replace(/\n/g, '<br>');
+        }
     } catch (e) {
         ans.innerHTML = "❌ 请求失败：" + e.message;
     }
