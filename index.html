@@ -8,14 +8,13 @@
     <script>
         window.MathJax = {
             tex: { inlineMath: [['$','$']], displayMath: [['$$','$$']] },
-            svg: { fontCache: 'global' }
+            startup: { typeset: false }
         };
     </script>
     <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <style>
         *{margin:0;padding:0;box-sizing:border-box;font-family:"Microsoft YaHei",sans-serif;}
 
-        /* 关键：不重复、全屏居中、不变形、清晰背景图 */
         body {
             position: relative;
             color: #e2e8f0;
@@ -25,7 +24,6 @@
             overflow-x: hidden;
         }
 
-        /* 暗色遮罩，文字清晰，不影响背景图 */
         body::before {
             content: "";
             position: fixed;
@@ -137,16 +135,49 @@
             border: 1px solid rgba(94,234,212,0.25);
         }
 
+        .ans-box p {
+            margin: 12px 0;
+            line-height: 1.8;
+        }
+
+        .ans-box .MathJax {
+            display: block !important;
+            margin: 10px auto !important;
+            text-align: center !important;
+        }
+
         .ans-box h1,.ans-box h2,.ans-box h3 {
             color: #5eead4;
             margin: 14px 0;
         }
-        .ans-box p { margin: 10px 0; }
-        .ans-box ul,.ans-box ol { margin-left: 24px; margin: 10px 0; }
-        .ans-box strong { color: #93c5fd; font-weight: 600; }
+        .ans-box ul,.ans-box ol {
+            margin-left: 24px;
+            margin: 10px 0;
+        }
+        .ans-box strong {
+            color: #93c5fd;
+            font-weight: 600;
+        }
 
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-thumb { background: #5eead4; border-radius: 10px; }
+
+        .diagram-card {
+            background: rgba(255,255,255,0.08);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(72, 187, 255, 0.35);
+            border-radius: 20px;
+            padding: 26px;
+            margin-bottom: 22px;
+            text-align: center;
+        }
+
+        .diagram-card img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
     </style>
 </head>
 
@@ -164,6 +195,12 @@
         <div class="card">
             <h3>📘 我的深度解答在下面吖~</h3>
             <div class="ans-box" id="ans">我已准备接受拷问啦，可以为你解答原理、步骤、误差、仪器、报告等全部深度问题噢～</div>
+        </div>
+
+        <!-- 这里用你自己的GitHub外链，100%有效 -->
+        <div class="diagram-card">
+            <h3 style="color: #60a5fa; margin-bottom: 18px; font-size: 19px; text-align: left;">📐 光杠杆放大原理示意图</h3>
+            <img src="https://raw.githubusercontent.com/zhanglihao-del/my-lab-images/main/light-lever.png" alt="光杠杆放大原理示意图">
         </div>
     </div>
 
@@ -197,11 +234,13 @@ const KNOWLEDGE = `
 $$E=\\frac{\\sigma}{\\varepsilon}=\\frac{F/S}{\\Delta L/L}$$
 S=πd²/4
 
-### 2. 光杠杆放大
-ΔL：金属丝微小伸长
-Δx：标尺读数变化
-放大倍数：2H/D
-$$\\Delta L=\\frac{D\\cdot\\Delta x}{2H}$$
+### 2. 光杠杆放大（物理量100%严谨定义）
+ΔL：金属丝真实微小伸长量（微米级）
+Δx：标尺读数变化量（放大后位移）
+D：光杠杆后足尖到前两足连线的垂直距离
+H：反射镜到标尺的垂直距离
+放大倍数：M = 2H/D
+几何关系：ΔL = D·Δx/(2H)
 
 ### 3. 最终公式
 $$E=\\frac{8FLH}{\\pi d^2 D \\Delta x}$$
@@ -251,6 +290,36 @@ $$E=\\frac{8FLH}{\\pi d^2 D \\Delta x}$$
 
 ## 十二、答辩重点
 光杠杆放大、公式推导、逐差法、误差、仪器调节、数据处理
+
+# ===================== 深度物理思考体系（AI 举一反三、自由推理）=====================
+## 一、实验核心物理本质
+1. 必须保证金属丝处于**纯弹性形变范围**，胡克定律 F=kΔL 严格成立；
+2. 光杠杆的作用是**线性放大微小位移**，ΔL 与 Δx 必须保持严格线性；
+3. 所有操作规范、仪器选择、数据处理，均围绕：**保线性、消误差、提精度**。
+
+## 二、操作逻辑（为什么要/不要做某件事）
+- 预拉金属丝：消除弯曲松弛，保证纯弹性形变；
+- 加减力双向测量：消除机械回程间隙误差；
+- 禁止回旋螺母：避免破坏拉力与位移的线性关系；
+- 禁止震动：光杠杆对微位移极敏感，震动直接导致读数失真；
+- 禁止中途调望远镜：光路与放大系统固定，调节会让全部数据失效；
+- 多位置测直径：金属丝非正圆，d²对结果影响极大，必须减小系统误差；
+- 拉力不超上限：防止进入塑性形变，使公式完全失效。
+
+## 三、仪器选择逻辑（量程 + 精度匹配）
+- L、H 大尺寸 → 钢卷尺（量程足够）
+- D 中等尺寸 → 游标卡尺（精度匹配）
+- d 微小尺寸 → 螺旋测微器（高精度必需）
+- 微小形变 → 光杠杆放大（30~50倍）
+- 光路观测 → 望远镜（消视差、精准读数）
+
+## 四、误差分析逻辑
+- 系统误差：仪器倾斜、直径不均、间隙、光路偏移（可消除）
+- 随机误差：震动、读数偏差、环境干扰（可减小）
+
+## 五、数据处理逻辑
+- 逐差法 / 线性拟合：充分利用数据、消除线性系统误差、验证胡克定律
+- 简单平均：丢失线性关系，精度低，不推荐使用
 `;
 
 async function ask() {
@@ -260,16 +329,18 @@ async function ask() {
     ans.innerHTML = "🧠 我正在思考ing...";
 
     const prompt = `
-你是大学物理实验资深讲师，**完全基于下面官方说明书** + **深度物理理解**回答学生问题。
-学生不问数据也能答原理、步骤、误差、仪器、报告、答辩、逐差法、光杠杆、公式、实验反思。
-回答要求：
-1. 专业、深度、严谨、竞赛答辩水平；
-2. 用Markdown排版、公式用$$或$；
-3. 分点清晰、逻辑完整；
-4. 结合说明书，不要编造；
-5. 语言易懂，适合大学生。
+你是大学物理实验顶级资深讲师，只基于物理本质、实验逻辑、误差机制回答，
+**绝对不套模板、不背固定答案、不写实验报告套话、不重复课文。**
 
-【实验说明书全文】
+回答规则：
+1. 学生问什么，**只精准回答什么**，直击物理本质；
+2. 所有公式必须用$$块级公式，单独一行、居中显示；
+3. 分段清晰、排版整洁、文字与公式不重叠；
+4. 语言专业、简洁、严谨；
+5. 学生无论如何提问，你都能**深度思考、举一反三、自主推理**；
+6. 绝不背诵固定题库，所有回答均为**实时逻辑分析**。
+
+【实验知识库】
 ${KNOWLEDGE}
 
 【学生问题】
@@ -286,13 +357,13 @@ ${q}
             body: JSON.stringify({
                 model: MODEL,
                 input: { prompt },
-                parameters: { temperature: 0.2, result_format: "text" }
+                parameters: { temperature: 0.1, result_format: "text" }
             })
         });
         const data = await res.json();
         const text = data.output.text;
         ans.innerHTML = marked.parse(text);
-        MathJax.typesetPromise([ans]);
+        await MathJax.typesetPromise([ans]);
     } catch (e) {
         ans.innerHTML = "❌ 请求失败：" + e.message;
     }
