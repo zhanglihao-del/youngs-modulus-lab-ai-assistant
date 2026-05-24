@@ -8,7 +8,8 @@
     <script>
         window.MathJax = {
             tex: { inlineMath: [['$','$']], displayMath: [['$$','$$']] },
-            startup: { typeset: false }
+            startup: { typeset: false },
+            svg: { displayAlign: 'center' }
         };
     </script>
     <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -138,21 +139,28 @@
         .ans-box p {
             margin: 12px 0;
             line-height: 1.8;
+            clear: both;
         }
 
-        .ans-box .MathJax {
+        .ans-box .MathJax,
+        .ans-box .mathjax {
             display: block !important;
-            margin: 10px auto !important;
+            margin: 15px auto !important;
             text-align: center !important;
+            float: none !important;
+            max-width: 100% !important;
+            overflow-x: auto;
         }
 
         .ans-box h1,.ans-box h2,.ans-box h3 {
             color: #5eead4;
             margin: 14px 0;
+            clear: both;
         }
         .ans-box ul,.ans-box ol {
             margin-left: 24px;
             margin: 10px 0;
+            clear: both;
         }
         .ans-box strong {
             color: #93c5fd;
@@ -197,10 +205,9 @@
             <div class="ans-box" id="ans">我已准备接受拷问啦，可以为你解答原理、步骤、误差、仪器、报告等全部深度问题噢～</div>
         </div>
 
-        <!-- 同源图片地址，手机端也能正常加载 -->
         <div class="diagram-card">
             <h3 style="color: #60a5fa; margin-bottom: 18px; font-size: 19px; text-align: left;">📐 光杠杆放大原理示意图</h3>
-            <img src="https://zhanglihao-del.github.io/youngs-modulus-lab-ai-assistant/light-lever.png" alt="光杠杆放大原理示意图">
+            < img src="https://zhanglihao-del.github.io/youngs-modulus-lab-ai-assistant/light-lever.png" alt="光杠杆放大原理示意图">
         </div>
     </div>
 
@@ -362,7 +369,6 @@ ${q}
         });
         const data = await res.json();
         const text = data.output.text;
-        // 兼容手机端：如果marked加载失败，直接显示文本
         if (typeof marked !== 'undefined') {
             ans.innerHTML = marked.parse(text);
             await MathJax.typesetPromise([ans]);
